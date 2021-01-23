@@ -16,7 +16,7 @@
     {
       "label": "render-img",
       "type": "shell",
-      "command": "manim ${file} ${input:Scene} -ps",
+      "command": "manim ${file} ${input:Scene} -s",
       "problemMatcher": [],
       "group": {
         "kind": "build",
