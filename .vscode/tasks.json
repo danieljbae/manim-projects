@@ -6,7 +6,7 @@
     {
       "label": "render",
       "type": "shell",
-      "command": "manim ${file} ${input:Scene} -f",
+      "command": "manim ${file} ${input:Scene} -pql",
       "problemMatcher": [],
       "group": {
         "kind": "build",
@@ -17,7 +17,7 @@
   "inputs": [
     {
       "id": "Scene",
-      "description": "Enter the scene you want to render!!",
+      "description": "Type the name of the Scene you want to render",
       "default": "",
       "type": "promptString"
     }
