@@ -4,9 +4,19 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "render",
+      "label": "render-vid",
       "type": "shell",
       "command": "manim ${file} ${input:Scene} -pql",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "render-img",
+      "type": "shell",
+      "command": "manim ${file} ${input:Scene} -ps",
       "problemMatcher": [],
       "group": {
         "kind": "build",
@@ -17,7 +27,7 @@
   "inputs": [
     {
       "id": "Scene",
-      "description": "Type the name of the Scene you want to render",
+      "description": "Type Scene Name",
       "default": "",
       "type": "promptString"
     }
