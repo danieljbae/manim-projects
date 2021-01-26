@@ -47,11 +47,7 @@ class ForRange(Scene):
         self.wait(3)
 
 
-class ForRange2(Scene):
-    """
-    Using Zip
-    """
-
+class ZipRange(Scene):
     def construct(self):
         vals = TextMobject("3", "8", "12", "15", "16", "19").scale(2)
         idx = TextMobject("[0] ", "[1] ", "[2] ", "[3] ", "[4] ", "[5]").scale(1.5)
@@ -82,7 +78,7 @@ class CrossText1(Scene):
 
 class FrameBox2(Scene):
     """
-    Emphasize subarray via FrameBox
+    Emphasize subarray via  FrameBox
     """
 
     def construct(self):
