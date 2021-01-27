@@ -22,11 +22,26 @@ class psuedoCode(Scene):
 
 class pairsBox(Scene):
     def construct(self):
+        pass
 
 
 class arrayContainer(Scene):
     def construct(self):
-        pass
+        sq1 = Square(side_length=1)
+        sq2 = Square(side_length=1)
+        sq3 = Square(side_length=1)
+        sq4 = Square(side_length=1)
+        sq5 = Square(side_length=1)
+        self.add(sq1, sq2, sq3, sq4, sq5)
+
+        # for i, mobj in enumerate(self.mobjects):
+        #     mobj.shift(i * RIGHT)
+        #     self.play(Write(SurroundingRectangle(mobj)))
+
+        arrayObj = Group(sq1, sq2, sq3, sq4, sq5)
+        self.play((Write(arrayObj)))
+
+        self.wait()
 
 
 class AddtoVGroup(Scene):

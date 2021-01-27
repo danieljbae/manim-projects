@@ -1,0 +1,13 @@
+Bubble Sort Outline:
+1) Initialize Array Box
+- Such that I can slice elements
+
+2) Highlight 2 values for which we are bubbling (cursor)
+- MovingFrameBox()
+
+3) If we swap, show rotation 
+- Transform()
+- mobject_update_utils()
+
+4) Keep track of sorted region and unsorted region
+- Bracket()
