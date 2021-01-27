@@ -1,0 +1,19 @@
+Some common errors and resolution:
+
+1) FileNotFound 
+File "c:\users\danie\anaconda3\lib\site-packages\manim\utils\file_ops.py", line 58, in open_file
+    os.startfile(file_path if not in_browser else os.path.dirname(file_path))
+FileNotFoundError: [WinError 2] The system cannot find the file specified: 'C:\\Users\\danie\\Desktop\\CS-Projects\\manimProjects\\media\\videos\\graphLayout\\480p15\\test.mp4'
+
+Resolution:
+In scene.construct function: make sure to call your specific scene function 
+
+ex. 
+
+class test(Scene):
+    def construct(self):
+        # call drawTitle() scene here
+    def drawTile(self):
+        # make mbjects
+        # play, add, or some animate fx
+
