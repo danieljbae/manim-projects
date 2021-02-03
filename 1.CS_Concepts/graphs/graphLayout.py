@@ -140,6 +140,27 @@ class test(Scene):
             }
         }
 
+        # simpleConfig = {
+        #     'nodeVals': ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+        #     'edgeDict': {
+        #         'A': ['B', 'C'],
+        #         'B': ['C', 'E'],
+        #         'C': ['D'],
+        #         'D': ['B'],
+        #         'E': ['F', 'G'],
+        #         'F': ['G'],
+        #     },
+        #     'positions': {
+        #         'A': LEFT * 4 + UP * 2,
+        #         'B': LEFT * 2 + UP * 2,
+        #         'C': LEFT * 4 + DOWN * 2,
+        #         'D': LEFT * 2 + DOWN * 2,
+        #         'E': RIGHT * 2 + UP * 2,
+        #         'F': RIGHT * 4 + UP * 2,
+        #         'G': RIGHT * 4 + DOWN * 2
+        #     }
+        # }
+
         # Maps node Value to node object, to connect edges
         graphVal_toNode = {}
         graphNodes, graphEdges = [], {}

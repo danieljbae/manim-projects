@@ -1,4 +1,6 @@
 {
-  "python.pythonPath": "C:\\Users\\danie\\Anaconda3\\envs\\manimCE\\python.exe"
-  //   "python.pythonPath": "/Users/danie/Anaconda3/envs/manimCE",
+  "python.pythonPath": "C:\\Users\\danie\\Anaconda3\\envs\\manimCE\\python.exe",
+  "python.analysis.extraPaths": [
+    "C:\\Users\\danie\\Desktop\\CS-Projects\\manimProjects\\1.CS_Concepts\\graphs\\utils"
+  ]
 }

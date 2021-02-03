@@ -22,6 +22,16 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "saveGIF-vid",
+      "type": "shell",
+      "command": "manim ${file} ${input:Scene} -pql -i",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ],
   "inputs": [
