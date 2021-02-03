@@ -2,6 +2,11 @@ from manim import *
 from src.graphObj import GraphNode, graphConfigs
 
 
+# TO DO: Animation Video 2
+# >> Convert this intro a recursive Tree
+# >> Sync with Psuedocode
+# >> Add to JS/React Website to view all Projects
+
 # class drawGraphLayout(Scene):
 class test(Scene):
     def construct(self):
