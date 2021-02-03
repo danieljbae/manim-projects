@@ -1,5 +1,6 @@
 __pycache__/
 media/
+!*/media/videos/dfsScene/480p15/test.mp4
 manimObjectBasics/
 commonErrors.txt
 videoIdeas.txt

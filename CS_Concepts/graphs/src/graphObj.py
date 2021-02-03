@@ -64,7 +64,8 @@ graphConfigs = {
             5: RIGHT * 4 + UP * 2,
             6: RIGHT * 4 + DOWN * 2
         }
-    }
+    },
+    # Add more configs here (ex different positions, # of nodes)
 
 }
 
