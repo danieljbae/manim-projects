@@ -1,0 +1,7 @@
+# Todo: Demonstrate backtracking more clearly
+# - different color edges Traversing back to source node
+# - also show recursion stacks with Special Camera Fx
+# Animation Video 2
+# - Convert this intro a recursive Tree
+# - Sync with Psuedocode
+# - Add to JS/React Website to view all Projects

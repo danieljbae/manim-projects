@@ -2,11 +2,6 @@ from manim import *
 from src.graphObj import GraphNode, graphConfigs
 
 
-# TO DO: Animation Video 2
-# >> Convert this intro a recursive Tree
-# >> Sync with Psuedocode
-# >> Add to JS/React Website to view all Projects
-
 # class drawGraphLayout(Scene):
 class test(Scene):
     def construct(self):
@@ -21,11 +16,12 @@ class test(Scene):
         graph, entireGraph, edgeDict, nodeObjects, edgeObjects = self.displayGraph()
 
         ### DFS Animations: Traversal Order ###
-        nodeValPath, nodeEdgePath = dfs(graph, start=0)
-        orderTitle = self.displayOrder(nodeValPath, entireGraph)
-        self.dfsAnimation(nodeValPath, nodeEdgePath, edgeDict, nodeObjects, orderTitle[1:])
+        nodeValPath, edgePath = dfs(graph, start=0)
+        sep, self.sepLen = " -> ", len(" -> ")
+        orderTitle = self.displayOrder(nodeValPath, entireGraph, sep)
+        self.dfsAnimation(nodeValPath, edgeDict, nodeObjects, orderTitle[1:], edgePath, edgeObjects)
 
-    def dfsAnimation(self, dfs_nodeOrder, nodeEdgePath, edgeDict, nodeObjects, orderTitle):
+    def dfsAnimation(self, dfs_nodeOrder, edgeDict, nodeObjects, orderTitle, edgePath, edgeObjects):
         """
         Animates DFS selection process (in pre-defined DFS path)
         Backtrack: if out-degree of 0, in-degree
@@ -47,12 +43,16 @@ class test(Scene):
         self.wait(2)
 
         # DFS with edges of traversal
-        nodeIdx, edgeIdx = 0, 1
+        nodeIdx = edgeIdx = 0
         nodeTxt_beg = nodeTxt_end = 0
-        while edgeIdx < len(nodeEdgePath):
-            fromNode_val, toNode_val = nodeEdgePath[edgeIdx]
+        while edgeIdx < len(edgePath):
+            fromNode_val, toNode_val = edgePath[edgeIdx]
+            # fromNode_val, toNode_val = nodeEdgePath[edgeIdx]
             nodeTxt_beg, nodeTxt_end = ((self.sepLen+1)*nodeIdx, (self.sepLen+1)*(nodeIdx+1))
             nodeObjects[fromNode_val].set_color(GREEN_A)
+            # print(f"Current: edgeIdx {edgeIdx} , edgeVal {nodeEdgePath[edgeIdx]}")
+            # print(f"Current: nodeIdx {nodeIdx} , dfs_nodeOrder[nodeIdx] {dfs_nodeOrder[nodeIdx]}")
+
             self.play(
                 ShowCreationThenFadeAround(nodeObjects[toNode_val]),
                 WiggleOutThenIn(nodeObjects[toNode_val]),
@@ -60,23 +60,80 @@ class test(Scene):
                 TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeTxt_beg:nodeTxt_end]),
                 runtime=2
             )
+
+            # Reference: https://github.com/3b1b/manim/issues/688
+            # Update: this is because I am referencing the edge's original location in memory
+            # and not the VGroup
+            # Solution: You'll likely have to do some deepcopy of some sort
+            # for edges to be freely edited (independent of VGroup)
+
+            # Debug: edges (2,4) amd (4,6)  are not changing colors
+            # Expected behaviour: edge object to chnage to green color
+            # Because: edgeDict(2,4) contains edge object,
+            # and we can clearly see this pair exists and a line is it's value
+            # but the line at edgeDict(2,4) doesn't chnage colors
+
             # Mark traveresed edges and visited nodes (ex. Bread crumbs)
-            edgeDict[(fromNode_val, toNode_val)]
-            edgeDict[(fromNode_val, toNode_val)].set_color(YELLOW_B)
-            nodeObjects[fromNode_val].set_color(GREY)
-            nodeIdx += 1
-            edgeIdx += 2
-            self.wait()
+            if (fromNode_val, toNode_val) in edgeDict:
+                print("okay thats what i thought")
+                print((fromNode_val, toNode_val))
+                print(edgeDict)
+                print(edgeDict[(fromNode_val, toNode_val)])
+                edgeObjects[8].set_color(GREEN)
+                edgeObjects[9].set_color(GREEN)
+                edgeObjects[10].set_color(GREEN)
+                edgeObjects[11].set_color(GREEN)
+                edgeObjects[12].set_color(GREEN)
+                edgeObjects[13].set_color(GREEN)
+                edgeObjects[14].set_color(GREEN)
+
+                # edgeDict[(fromNode_val, toNode_val)].set_color(GREEN)
+                # edgeDict[(fromNode_val, toNode_val)].set_color(YELLOW_B)
+                nodeObjects[fromNode_val].set_color(GREY)
+                edgeIdx += 1
+                nodeIdx += 1
+                self.wait()
+
+            elif (toNode_val, fromNode_val) in edgeDict:  # Flip Case: swap to and from nodes
+                fromNode_val, toNode_val = toNode_val, fromNode_val
+                edgeDict[(fromNode_val, toNode_val)].set_color(YELLOW_B)
+                nodeObjects[fromNode_val].set_color(GREY)
+                edgeIdx += 1
+                nodeIdx += 1
+                self.wait()
+                # If we have already set color to Yellow, this mean we backtracked
+            else:
+                edgeIdx += 2
+                nodeIdx += 1
+                break
+
+            # if (fromNode_val, toNode_val) not in edgeDict or (toNode_val, fromNode_val) not in edgeDict:
+            #     edgeIdx += 2
+            #     nodeIdx += 1
+            #     break
+
+            # # Flip edge if edge key is identified
+            # if (fromNode_val, toNode_val) in edgeDict:
+            #     fromNode_val, toNode_val = toNode_val, fromNode_val
+
+            # edgeDict[(fromNode_val, toNode_val)].set_color(YELLOW_B)
+            # nodeObjects[fromNode_val].set_color(GREY)
+            # edgeIdx += 2
+            # nodeIdx += 1
+            # self.wait()
+
+            # Old
+            # edgeDict[(fromNode_val, toNode_val)].set_color(YELLOW_B)
+            # nodeObjects[fromNode_val].set_color(GREY)
+            # edgeIdx += 2
+            # nodeIdx += 1
+            # self.wait()
 
         # Final Node in dfs path/tree
         self.play(
             TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[-1])
-            # TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx])
         )
         self.wait()
-        # Todo: Demonstrate backtracking more clearly
-        # - different color edges Traversing back to source node
-        # - also show recursion stacks with Special Camera Fx
 
     def displayTitle(self, title, purpose):
         titleObj = Tex(title)
@@ -95,21 +152,20 @@ class test(Scene):
         Create graph and layout, then animate creation of graph
         """
         graph, edgeDict = self.buildGraph()
-        nodeObjects, edgeObjects = self.groupGraphObjects(graph, edgeDict)
-        entireGraph = VGroup(nodeObjects, edgeObjects).shift(DOWN*.1)
+        nodeVGroup, edgeVGroup = self.groupGraphObjects(graph, edgeDict)
+        entireGraph = VGroup(nodeVGroup, edgeVGroup).shift(DOWN*.1)
         self.play(
             ShowCreation(entireGraph),
             run_time=5
         )
-        return graph, entireGraph, edgeDict, nodeObjects, edgeObjects
+        return graph, entireGraph, edgeDict, nodeVGroup, edgeVGroup
 
-    def displayOrder(self, nodeValPath, entireGraph):
+    def displayOrder(self, nodeValPath, entireGraph, sep):
         """
         Converts path[0,2,...] to Tex('Order: ','0 -> ','2 -> ',...)
         """
-        sep, self.sepLen = " -> ", len(" -> ")
         nodeValPath_str = sep.join(list(map(str, nodeValPath)))
-        orderTitle = Tex('Order:', *nodeValPath_str)
+        orderTitle = Tex('Order: ', *nodeValPath_str)
         orderTitle.shift(DOWN * 2, LEFT * 1.5).next_to(entireGraph, DOWN)
         self.play(
             Write(orderTitle[0]),
@@ -119,25 +175,26 @@ class test(Scene):
 
     def buildGraph(self):
         """
-        Create mobjects: node and edge 
+        Create mobjects(node and edge) from adjan 
         """
-        config = graphConfigs['simpleConfig']
+        config = graphConfigs['config2']
         nodeObjects, edgeObjects = [], {}
-        # Maps: key = node value, val = node object
-        graphVal_toObj = {}
+        graphVal_toObj = {}  # Maps {key=node val : val=node object}
 
         # Create node objects
-        for nodeVal in config['nodeVals']:
+        for nodeVal in config['adjList'].keys():
+            # for nodeVal in config['nodeVals']:
             node = GraphNode(nodeVal, position=config['positions'][nodeVal])
             nodeObjects.append(node)
             graphVal_toObj[node.char] = node
 
-        # Create edge objects
+        # Create edge objects - 2nd pass to connect edges to nodes
         for nodeFrom in nodeObjects:
-            if nodeFrom.char in config['edgeDict']:
-                for nodeToVal in config['edgeDict'][nodeFrom.char]:
-                    nodeTo = graphVal_toObj[nodeToVal]
-                    edgeObjects[(nodeFrom.char, nodeTo.char)] = nodeFrom.connect(nodeTo)
+            if nodeFrom.char not in config['adjList']:
+                continue
+            for nodeToVal in config['adjList'][nodeFrom.char]:
+                nodeTo = graphVal_toObj[nodeToVal]
+                edgeObjects[(nodeFrom.char, nodeTo.char)] = nodeFrom.connect(nodeTo)
 
         return nodeObjects, edgeObjects
 
@@ -168,27 +225,29 @@ def dfs(graph, start):
     """
     Returns a list of nodes and edges in Pre-Order DFS traversal
     """
-    nodeValPath = []
+    nodePath = []
     visited = [False] * len(graph)
     edgeTo = [None] * len(graph)
     stack = [start]
-    while len(stack) > 0:
+    while stack:
         node = stack.pop()
         if not visited[node]:
             visited[node] = True
-            nodeValPath.append(node)
+            nodePath.append(node)
         for neighbor in graph[node].neighbors:
             neighbor_node = int(neighbor.char)
             if not visited[neighbor_node]:
                 edgeTo[neighbor_node] = node
                 stack.append(neighbor_node)
 
-    nodeEdgePath = []
-    for i in range(len(nodeValPath) - 1):
-        prev, cursor = nodeValPath[i], nodeValPath[i + 1]
-        nodeEdgePath.append(prev)
-        nodeEdgePath.append((edgeTo[cursor], cursor))
+    # nodeEdgePath = []
+    edgePath = []
+    for i in range(len(nodePath) - 1):
+        prev, cursor = nodePath[i], nodePath[i + 1]
+        # nodeEdgePath.append(prev)
+        # nodeEdgePath.append((edgeTo[cursor], cursor))
+        edgePath.append((edgeTo[cursor], cursor))
 
-    nodeEdgePath.append(cursor)
-    print(nodeValPath)
-    return nodeValPath, nodeEdgePath
+    # nodeEdgePath.append(cursor)
+    # print(nodePath)
+    return nodePath, edgePath

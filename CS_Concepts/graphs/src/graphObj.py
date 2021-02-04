@@ -44,9 +44,8 @@ class GraphNode:
 
 
 graphConfigs = {
-    'simpleConfig': {
-        'nodeVals': [0, 1, 2, 3, 4, 5, 6],
-        'edgeDict': {
+    'config1': {
+        'adjList': {
             0: [1, 2],
             1: [4],
             2: [3],
@@ -65,8 +64,29 @@ graphConfigs = {
             6: RIGHT * 4 + DOWN * 2
         }
     },
-    # Add more configs here (ex different positions, # of nodes)
+    'config2': {
+        'adjList': {
+            0: [1, 2],
+            1: [2, 4],
+            2: [3, 4],
+            3: [4],
+            4: [3, 2, 5, 6],
+            5: [4, 6],
+            6: [4, 5]
+        },
+        'positions': {
+            0: LEFT * 4 + UP * 2,
+            1: LEFT * 2 + UP * 2,
+            2: LEFT * 4 + DOWN * 2,
+            3: LEFT * 2 + DOWN * 2,
+            4: RIGHT * 2 + UP * 2,
+            5: RIGHT * 4 + UP * 2,
+            6: RIGHT * 4 + DOWN * 2
+        }
 
+        # Add more configs here (ex different positions, # of nodes)
+
+    }
 }
 
 
