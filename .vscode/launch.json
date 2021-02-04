@@ -10,14 +10,14 @@
       "request": "launch",
       "stopOnEntry": true,
       "justMyCode": false,
-      "program": "${file}",
+      "program": "${file}"
       //   "preLaunchTask": "render-vid",
-      "python": "C:\\Users\\danie\\Anaconda3\\envs\\manimCE\\python.exe",
-      "debugOptions": [
-        "WaitOnAbnormalExit",
-        "WaitOnNormalExit",
-        "RedirectOutput"
-      ]
+      //   "python": "C:\\Users\\danie\\Anaconda3\\envs\\manimCE\\python.exe",
+      //   "debugOptions": [
+      //     "WaitOnAbnormalExit",
+      //     "WaitOnNormalExit",
+      //     "RedirectOutput"
+      //   ]
     }
   ]
 }

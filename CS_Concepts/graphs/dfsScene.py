@@ -14,28 +14,30 @@ class test(Scene):
         Drives Scene Animations
         """
         ### Graph Layout ###
-        self.titleText = "Graph Layout"
-        self.displayTitle(self.titleText)
-        graph, entire_graph, edge_dict, graphNodes, graphEdges = self.displayGraph()
+        titleText = "Depth First Search"
+        purpose = "Visit all reachable nodes exactly 1x"
+
+        self.displayTitle(titleText, purpose)
+        graph, entireGraph, edgeDict, nodeObjects, edgeObjects = self.displayGraph()
 
         ### DFS Animations: Traversal Order ###
         nodeValPath, nodeEdgePath = dfs(graph, start=0)
-        orderTitle = self.displayOrder(nodeValPath, entire_graph)
-        self.dfsAnimation(nodeValPath, nodeEdgePath, edge_dict, graphNodes, orderTitle[1:])
+        orderTitle = self.displayOrder(nodeValPath, entireGraph)
+        self.dfsAnimation(nodeValPath, nodeEdgePath, edgeDict, nodeObjects, orderTitle[1:])
 
-    def dfsAnimation(self, dfs_nodeOrder, nodeEdgePath, edge_dict, graphNodes, orderTitle):
+    def dfsAnimation(self, dfs_nodeOrder, nodeEdgePath, edgeDict, nodeObjects, orderTitle):
         """
-        Animates the DFS selection process (in pre-defined DFS path)
+        Animates DFS selection process (in pre-defined DFS path)
         Backtrack: if out-degree of 0, in-degree
 
         @ nodeValPath: Values of nodes in dfs order
         @ nodeEdgePath: Nodes and Edges in dfs order
-        @ edge_dict: contains edge objects
-        @ graphNodes: contains node objects
+        @ edgeDict: maps edge pairs (u,v) to edge object
+        @ nodeObjects: contains node objects
         """
         infoBox = Paragraph("Backtrack:", 'If a node does not change', 'colors (grey), then backtrack').scale(.4)
         infoBox.set_opacity(.7)
-        startNodeBox = SurroundingRectangle(graphNodes[0], color=GREEN, buff=.5*SMALL_BUFF)
+        startNodeBox = SurroundingRectangle(nodeObjects[0], color=GREEN, buff=.5*SMALL_BUFF)
         startNodeText = TextMobject("Start Node").next_to(startNodeBox, UP*.5).scale(.6)
         self.play(
             ShowCreation(infoBox),
@@ -48,35 +50,39 @@ class test(Scene):
         nodeIdx, edgeIdx = 0, 1
         while edgeIdx < len(nodeEdgePath):
             fromNode_val, toNode_val = nodeEdgePath[edgeIdx]
-            graphNodes[fromNode_val].set_color(GREEN_A)
+            nodeObjects[fromNode_val].set_color(GREEN_A)
             self.play(
-                ShowCreationThenFadeAround(graphNodes[toNode_val]),
-                WiggleOutThenIn(graphNodes[toNode_val]),
-                TransformFromCopy(graphNodes[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx]),
+                ShowCreationThenFadeAround(nodeObjects[toNode_val]),
+                WiggleOutThenIn(nodeObjects[toNode_val]),
+                TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx]),
                 runtime=2
             )
             # Mark traveresed edges and visited nodes (ex. Bread crumbs)
-            edge_dict[(fromNode_val, toNode_val)]
-            edge_dict[(fromNode_val, toNode_val)].set_color(YELLOW_B)
-            graphNodes[fromNode_val].set_color(GREY)
+            edgeDict[(fromNode_val, toNode_val)]
+            edgeDict[(fromNode_val, toNode_val)].set_color(YELLOW_B)
+            nodeObjects[fromNode_val].set_color(GREY)
             nodeIdx += 1
             edgeIdx += 2
             self.wait()
 
-        # Final Node in dfs tree
+        # Final Node in dfs path/tree
         self.play(
-            TransformFromCopy(graphNodes[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx])
+            TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx])
         )
         self.wait()
         # Todo: Demonstrate backtracking more clearly, with different color edges
         # and showing which node I am backtracking to (recursive stacks)
         # For example, in my example graph, 2 is not visited until we backtrack from 3
 
-    def displayTitle(self, title):
-        title = TextMobject(self.titleText)
-        title.scale(1.2).to_edge(UP)
+    def displayTitle(self, title, purpose):
+        titleObj = TextMobject(title)
+        purposeObj = TextMobject(purpose)
+        titleObj.scale(1.2).to_edge(UP)
+        purposeObj.scale(.6).to_edge(UP).shift(DOWN*.7)
+
         self.play(
-            Write(title),
+            Write(titleObj),
+            Write(purposeObj),
         )
         self.wait()
 
@@ -84,19 +90,19 @@ class test(Scene):
         """
         Create graph and layout, then animate creation of graph
         """
-        graph, edge_dict = self.buildGraph()
-        graphNodes, graphEdges = self.groupGraphObjects(graph, edge_dict)
-        entire_graph = VGroup(graphNodes, graphEdges)
+        graph, edgeDict = self.buildGraph()
+        nodeObjects, edgeObjects = self.groupGraphObjects(graph, edgeDict)
+        entireGraph = VGroup(nodeObjects, edgeObjects).shift(DOWN*.1)
         self.play(
-            ShowCreation(entire_graph),
+            ShowCreation(entireGraph),
             run_time=5
         )
-        return graph, entire_graph, edge_dict, graphNodes, graphEdges
+        return graph, entireGraph, edgeDict, nodeObjects, edgeObjects
 
-    def displayOrder(self, nodeValPath, entire_graph):
+    def displayOrder(self, nodeValPath, entireGraph):
         nodeValPath_str = " ".join(list(map(str, nodeValPath)))
         orderTitle = TextMobject('Order: ', '0 -> ', '2 -> ', '3 -> ', '1 -> ', '4 -> ', '6 -> ', '5')
-        orderTitle.shift(DOWN * 2, LEFT * 1.5).next_to(entire_graph, DOWN)
+        orderTitle.shift(DOWN * 2, LEFT * 1.5).next_to(entireGraph, DOWN)
         self.play(
             Write(orderTitle[0]),
             run_time=2
@@ -108,29 +114,30 @@ class test(Scene):
         Create mobjects: node and edge 
         """
         config = graphConfigs['simpleConfig']
-        graphNodes, graphEdges = [], {}
+        nodeObjects, edgeObjects = [], {}
         # Maps: key = node value, val = node object
         graphVal_toObj = {}
 
         # Create node objects
         for nodeVal in config['nodeVals']:
             node = GraphNode(nodeVal, position=config['positions'][nodeVal])
-            graphNodes.append(node)
+            nodeObjects.append(node)
             graphVal_toObj[node.char] = node
 
-        # Create/Connect edges based off Node objects
-        for nodeFrom in graphNodes:
+        # Create edge objects
+        for nodeFrom in nodeObjects:
             if nodeFrom.char in config['edgeDict']:
                 for nodeToVal in config['edgeDict'][nodeFrom.char]:
                     nodeTo = graphVal_toObj[nodeToVal]
-                    graphEdges[(nodeFrom.char, nodeTo.char)] = nodeFrom.connect(nodeTo)
+                    edgeObjects[(nodeFrom.char, nodeTo.char)] = nodeFrom.connect(nodeTo)
 
-        return graphNodes, graphEdges
+        return nodeObjects, edgeObjects
 
-    def groupGraphObjects(self, graph, edge_dict, node_color=BLUE_A, stroke_color=BLUE_C, data_color=WHITE,
+    def groupGraphObjects(self, graph, edgeDict, node_color=BLUE_A, stroke_color=BLUE_C, data_color=WHITE,
                           edge_color=GREY, scale_factor=1.2, show_data=True):
         """
-        VGGroup: group manim objects together (ex node: data, circle, color, etc.)
+        VGGroup: groups manim objects together (ex nodes comprised of: circle, data, color, etc.)
+        Returns: node and edge containers, with all node objects and all edge objects
         """
         nodes = edges = []
         for node in graph:
@@ -142,7 +149,7 @@ class test(Scene):
             else:
                 nodes.append(node.circle)
 
-        for edge in edge_dict.values():
+        for edge in edgeDict.values():
             edge.set_stroke(width=7*scale_factor)
             edge.set_color(color=edge_color)
             edges.append(edge)
@@ -151,7 +158,7 @@ class test(Scene):
 
 def dfs(graph, start):
     """
-    Returns a list of vertices and edges in preorder traversal
+    Returns a list of nodes and edges in Pre-Order DFS traversal
     """
     nodeValPath = []
     visited = [False] * len(graph)

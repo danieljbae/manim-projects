@@ -24,9 +24,9 @@
       }
     },
     {
-      "label": "saveGIF-vid",
+      "label": "GIF",
       "type": "shell",
-      "command": "manim ${file} ${input:Scene} -pql -i",
+      "command": "manim ${file} ${input:Scene} -pqh -i",
       "problemMatcher": [],
       "group": {
         "kind": "build",
