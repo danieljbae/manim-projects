@@ -11,7 +11,7 @@ class GraphNode:
         # Formatting
         self.nodeRadius, self.nodeScale = 0.5, 1
         self.edgeSize = 0.4
-        self.data = TextMobject(str(data)).scale(self.nodeScale)
+        self.data = Tex(str(data)).scale(self.nodeScale)
         self.data.move_to(position)
         self.center = position
         self.circle = Circle(radius=self.nodeRadius)

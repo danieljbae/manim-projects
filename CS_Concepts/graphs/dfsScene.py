@@ -11,7 +11,7 @@ from src.graphObj import GraphNode, graphConfigs
 class test(Scene):
     def construct(self):
         """
-        Drives Scene Animations
+        Drives Animation Scenes
         """
         ### Graph Layout ###
         titleText = "Depth First Search"
@@ -38,7 +38,7 @@ class test(Scene):
         infoBox = Paragraph("Backtrack:", 'If a node does not change', 'colors (grey), then backtrack').scale(.4)
         infoBox.set_opacity(.7)
         startNodeBox = SurroundingRectangle(nodeObjects[0], color=GREEN, buff=.5*SMALL_BUFF)
-        startNodeText = TextMobject("Start Node").next_to(startNodeBox, UP*.5).scale(.6)
+        startNodeText = Tex("Start Node").next_to(startNodeBox, UP*.5).scale(.6)
         self.play(
             ShowCreation(infoBox),
             ShowCreation(startNodeBox),
@@ -48,13 +48,16 @@ class test(Scene):
 
         # DFS with edges of traversal
         nodeIdx, edgeIdx = 0, 1
+        nodeTxt_beg = nodeTxt_end = 0
         while edgeIdx < len(nodeEdgePath):
             fromNode_val, toNode_val = nodeEdgePath[edgeIdx]
+            nodeTxt_beg, nodeTxt_end = ((self.sepLen+1)*nodeIdx, (self.sepLen+1)*(nodeIdx+1))
             nodeObjects[fromNode_val].set_color(GREEN_A)
             self.play(
                 ShowCreationThenFadeAround(nodeObjects[toNode_val]),
                 WiggleOutThenIn(nodeObjects[toNode_val]),
-                TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx]),
+                # Node to Order text
+                TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeTxt_beg:nodeTxt_end]),
                 runtime=2
             )
             # Mark traveresed edges and visited nodes (ex. Bread crumbs)
@@ -67,16 +70,17 @@ class test(Scene):
 
         # Final Node in dfs path/tree
         self.play(
-            TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx])
+            TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[-1])
+            # TransformFromCopy(nodeObjects[dfs_nodeOrder[nodeIdx]], orderTitle[nodeIdx])
         )
         self.wait()
-        # Todo: Demonstrate backtracking more clearly, with different color edges
-        # and showing which node I am backtracking to (recursive stacks)
-        # For example, in my example graph, 2 is not visited until we backtrack from 3
+        # Todo: Demonstrate backtracking more clearly
+        # - different color edges Traversing back to source node
+        # - also show recursion stacks with Special Camera Fx
 
     def displayTitle(self, title, purpose):
-        titleObj = TextMobject(title)
-        purposeObj = TextMobject(purpose)
+        titleObj = Tex(title)
+        purposeObj = Tex(purpose)
         titleObj.scale(1.2).to_edge(UP)
         purposeObj.scale(.6).to_edge(UP).shift(DOWN*.7)
 
@@ -100,8 +104,12 @@ class test(Scene):
         return graph, entireGraph, edgeDict, nodeObjects, edgeObjects
 
     def displayOrder(self, nodeValPath, entireGraph):
-        nodeValPath_str = " ".join(list(map(str, nodeValPath)))
-        orderTitle = TextMobject('Order: ', '0 -> ', '2 -> ', '3 -> ', '1 -> ', '4 -> ', '6 -> ', '5')
+        """
+        Converts path[0,2,...] to Tex('Order: ','0 -> ','2 -> ',...)
+        """
+        sep, self.sepLen = " -> ", len(" -> ")
+        nodeValPath_str = sep.join(list(map(str, nodeValPath)))
+        orderTitle = Tex('Order:', *nodeValPath_str)
         orderTitle.shift(DOWN * 2, LEFT * 1.5).next_to(entireGraph, DOWN)
         self.play(
             Write(orderTitle[0]),
@@ -182,4 +190,5 @@ def dfs(graph, start):
         nodeEdgePath.append((edgeTo[cursor], cursor))
 
     nodeEdgePath.append(cursor)
+    print(nodeValPath)
     return nodeValPath, nodeEdgePath
