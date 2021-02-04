@@ -4,7 +4,7 @@ Animation projects using [Manim community edition](https://github.com/ManimCommu
 
 ## Animation Examples
 
-### DFS
+### DFS (Pre-Order)
 
 ![](./CS_Concepts/examples/test.gif)
 
