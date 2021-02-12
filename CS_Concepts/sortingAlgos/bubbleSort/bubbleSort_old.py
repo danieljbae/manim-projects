@@ -13,7 +13,6 @@ class psuedoCode(Scene):
             language="py",
         )
 
-        # How do I slice text in my code? I want to slice because I can reference chunks of code synced with animation
         # code0[1]
         # snippet = code0.line_numbers()
         self.play(Write(code0))
@@ -70,20 +69,6 @@ class AddtoVGroup(Scene):
         self.play(  # Animate group without component
             (gr-circle_red).animate.shift(RIGHT)
         )
-
-
-class TextItalicAndBoldExample(Scene):
-    def construct(self):
-        text0 = Text('Hello world', slant=ITALIC)
-        text1 = Text('Hello world', t2s={'world': ITALIC})
-        text2 = Text('Hello world', weight=BOLD)
-        text3 = Text('Hello world', t2w={'world': BOLD})
-
-        self.add(text0, text1, text2, text3)
-        for i, mobj in enumerate(self.mobjects):
-            mobj.shift(DOWN*(i-1))
-            self.play(Write(mobj))
-            self.wait()
 
 
 class VariablesWithValueTracker(Scene):
