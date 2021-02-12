@@ -4,7 +4,7 @@ from manim import *
 class psuedoCode(Scene):
     def construct(self):
         code0 = Code(
-            file_name=".\\1.CS_Concepts\\sourceCodeText.py",
+            file_name=".\\1.CS_Concepts\\bubbleSortAlgo.py",
             background="window",  # rectangle
             tab_width=4,
             background_stroke_color=WHITE,
