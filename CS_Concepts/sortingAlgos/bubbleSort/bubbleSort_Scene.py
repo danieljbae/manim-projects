@@ -77,6 +77,9 @@ class showArray(Scene):
         )
 
     def bubbleSort(self, nums, values_mobj, boxes_mobj):
+        '''
+        Bubble Sort Animations
+        '''
         array = self.array_mobj
 
         # Move array upwards
