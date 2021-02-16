@@ -8,10 +8,15 @@ Animation projects using [Manim community edition](https://github.com/ManimCommu
 
 ![](./CS_Concepts/examples/test.gif)
 
+
+### Bubble Sort (Pre-Order)
+![](./CS_Concepts/examples/showArray.gif)
+
 # To Do
 
-> 1. Sync animations with Psuedocode
-> 2. Add Projects to JS/React Website to view all algorithms
+> 1. Figure out why .gif files are slowed down 
+> 2. Sync animations with Psuedocode
+> 3. Add Projects to JS/React Website to view all algorithms
 
 ## Dependencies
 
