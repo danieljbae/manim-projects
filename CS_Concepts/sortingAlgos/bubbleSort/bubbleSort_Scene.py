@@ -1,17 +1,18 @@
 from manim import *
-# from src.arrayObj import
 
 
 class showArray(Scene):
     def construct(self):
-        #######################################
-        # export to arrayObj.py
-        self.pointer_color = YELLOW
-        self.box_color = BLUE_C
+        self.pointer_color = YELLOW_A
+        self.box_color = BLUE
         self.nums = [5, 2, 6, 4, 1, 3]  # simpleConfig
+
+        #######################################
+        # Scene Driver
         #######################################
         self.showTitle("Bubble Sort")
         self.showArray(self.nums)
+        self.bubbleSort(self.nums, self.values_mobj, self.boxes_mobj)
 
     def showTitle(self, titleText):
         title = TextMobject(titleText).to_edge(UP).scale(1.5)
@@ -41,8 +42,8 @@ class showArray(Scene):
             values.append(TextMobject(numText).move_to(2 * LEFT + i * RIGHT))
 
         # Aggregate mobjects
-        boxes_mobj = VGroup(*boxes)
-        values_mobj = VGroup(*values)
+        self.boxes_mobj = boxes_mobj = VGroup(*boxes)
+        self.values_mobj = values_mobj = VGroup(*values)
         self.array_mobj = VGroup(boxes_mobj, values_mobj)
         return boxes_mobj, values_mobj
 
@@ -75,47 +76,87 @@ class showArray(Scene):
             FadeOut(braceText),
         )
 
-    def doSort(self):
-        array = self.array
+    def bubbleSort(self, nums, values_mobj, boxes_mobj):
+        array = self.array_mobj
+
+        # Move array upwards
         array.generate_target()
         array.target.shift(UP)
-
-        self.play(MoveToTarget(array))
-
-        self.pointer = RegularPolygon(3, start_angle=-PI/2, color=self.pointer_color,
-                                      fill_opacity=1).scale(0.2).next_to(self.boxes[0], UP)
-
-        self.play(ShowCreation(self.pointer))
-
-        self._comparison_1()
-        self._comparison_2()
-        self._comparison_3()
-        self._comparison_4()
-        self._comparison_5()
-        self._comparison_6()
-        self._comparison_7()
-        self._comparison_8()
-        self._comparison_9()
-        self._comparison_10()
-
-        self.play(FadeOut(self.pointer))
-
-        self._activateArray()
-
-        array.generate_target()
-        array.target.shift(DOWN)
-
-        self.play(MoveToTarget(array))
-
-        ordered = TextMobject("Sorted").move_to(UP)
-
-        self.play(Write(ordered))
-
-        self.wait(3)
-
         self.play(
-            FadeOut(array),
-            FadeOut(ordered),
+            MoveToTarget(array)
         )
 
-        self.wait(10)
+        # Pointer to indicate current value
+        self.pointer = RegularPolygon(3, start_angle=-PI/2, color=self.pointer_color,
+                                      fill_opacity=1).scale(0.2).next_to(self.boxes[0], UP)
+        self.play(
+            ShowCreation(self.pointer)
+        )
+
+        # Bubble Sort Algorithm
+        arrayObjs = list(zip(nums, values_mobj, boxes_mobj))
+        # arrayObjs = list(zip(nums, values, boxes))
+        for i in range(len(arrayObjs)):
+            for j in range(len(arrayObjs)-i-1):
+                currNum, nextNum = arrayObjs[j][0], arrayObjs[j+1][0]
+                currNum, currText, currBox = arrayObjs[j][0], arrayObjs[j][1], arrayObjs[j][2]
+                nextNum, nextText, nextBox = arrayObjs[j+1][0], arrayObjs[j+1][1], arrayObjs[j+1][2]
+
+                # Swap values
+                if currNum > nextNum:
+                    arrayObjs[j], arrayObjs[j+1] = arrayObjs[j+1], arrayObjs[j]
+                    result = TextMobject("Swap").move_to(2 * DOWN)
+                    self.displayComparison(currNum, nextNum, currBox, nextBox)
+                    self.play(
+                        AnimationGroup(
+                            FadeIn(result),
+                            Swap(currText, nextText),
+                        )
+                    )
+                else:
+                    self.displayComparison(currNum, nextNum, currBox, nextBox)
+                    result = TextMobject("Do not Swap").move_to(2 * DOWN)
+                    self.play(
+                        FadeIn(result)
+                    )
+                self.play(
+                    FadeOut(result)
+                )
+                if j == len(arrayObjs)-i:
+                    continue
+                self.shiftPointer()
+
+            # Todo: play with add_updater to update/maintain color of sorted region
+            # self.boxes_mobj[j+1:].set_color(GREY)
+            self.resetPointer()
+
+    def displayComparison(self, currNum, nextNum, currBox, nextBox):
+        highlight = VGroup(currBox, nextBox)
+        brace = Brace(highlight, DOWN)
+        brace_text = TexMobject(str(currNum) + "\\text{ }\\textgreater\\text{ }" + str(nextNum)).next_to(brace, DOWN)
+        self.play(
+            AnimationGroup(
+                # GrowFromCenter(brace),
+                Write(brace_text)
+            )
+        )
+        self.play(
+            # FadeOut(brace),
+            FadeOut(brace_text),
+        )
+        currBox.set_color(self.box_color)
+        nextBox.set_color(self.box_color)
+
+    def shiftPointer(self):
+        self.pointer.generate_target()
+        self.pointer.target.shift(RIGHT)
+        self.play(
+            MoveToTarget(self.pointer)
+        )
+
+    def resetPointer(self):
+        self.pointer.generate_target()
+        self.pointer.target.next_to(self.boxes[0], UP)
+        self.play(
+            MoveToTarget(self.pointer)
+        )
