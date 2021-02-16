@@ -11,3 +11,13 @@ Bubble Sort Outline:
 
 4) Keep track of sorted region and unsorted region
 - Bracket()
+
+
+Merge Sort Intuition:
+Grade School Exercise: "Organize yourselves in order of birthdays" 
+- "Everyone with birthday before June, go to left" 
+
+
+Bucket Sort Intuition: 
+- Sort colored Legos
+- Demonstrate that we need to know something about problem before hand (i.e. k buckets)
