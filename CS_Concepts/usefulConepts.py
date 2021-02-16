@@ -1,48 +1,6 @@
 from manim import *
 
 
-class psuedoCode(Scene):
-    def construct(self):
-        code0 = Code(
-            file_name=".\\1.CS_Concepts\\bubbleSortAlgo.py",
-            background="window",  # rectangle
-            tab_width=4,
-            background_stroke_color=WHITE,
-            insert_line_no=False,
-            # style=Code.styles_list[15],
-            language="py",
-        )
-
-        # code0[1]
-        # snippet = code0.line_numbers()
-        self.play(Write(code0))
-        self.wait()
-
-
-class pairsBox(Scene):
-    def construct(self):
-        pass
-
-
-class arrayContainer(Scene):
-    def construct(self):
-        sq1 = Square(side_length=1)
-        sq2 = Square(side_length=1)
-        sq3 = Square(side_length=1)
-        sq4 = Square(side_length=1)
-        sq5 = Square(side_length=1)
-        self.add(sq1, sq2, sq3, sq4, sq5)
-
-        # for i, mobj in enumerate(self.mobjects):
-        #     mobj.shift(i * RIGHT)
-        #     self.play(Write(SurroundingRectangle(mobj)))
-
-        arrayObj = Group(sq1, sq2, sq3, sq4, sq5)
-        self.play((Write(arrayObj)))
-
-        self.wait()
-
-
 class AddtoVGroup(Scene):
     def construct(self):
         circle_red = Circle(color=RED)

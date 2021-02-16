@@ -1,15 +1,12 @@
 from manim import *
-
 # Source: https://github.com/fzndn/sort-algo-demo/blob/master/bubble.py
 
 
 class Demo(Scene):
-    CONFIG = {
-        'box_color': BLUE_C,
-        'pointer_color': PINK,
-    }
-
     def construct(self):
+        self.pointer_color = YELLOW
+        self.box_color = BLUE_C
+        # self.sortedColor = GREY
         self.showArray()
         self.doSort()
 

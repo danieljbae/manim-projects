@@ -2,11 +2,6 @@ from manim import *
 from src.graphObj import GraphNode, graphConfigs
 
 
-# TO DO: Animation Video 2
-# >> Convert this intro a recursive Tree
-# >> Sync with Psuedocode
-# >> Add to JS/React Website to view all Projects
-
 # class drawGraphLayout(Scene):
 class test(Scene):
     def construct(self):
@@ -28,7 +23,7 @@ class test(Scene):
     def dfsAnimation(self, dfs_nodeOrder, nodeEdgePath, edgeDict, nodeObjects, orderTitle):
         """
         Animates DFS selection process (in pre-defined DFS path)
-        Backtrack: if out-degree of 0, in-degree
+        Backtrack: if out-degree of 0
 
         @ nodeValPath: Values of nodes in dfs order
         @ nodeEdgePath: Nodes and Edges in dfs order
