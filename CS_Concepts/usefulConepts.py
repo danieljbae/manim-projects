@@ -1,49 +1,6 @@
 from manim import *
 
 
-class psuedoCode(Scene):
-    def construct(self):
-        code0 = Code(
-            file_name=".\\1.CS_Concepts\\bubbleSortAlgo.py",
-            background="window",  # rectangle
-            tab_width=4,
-            background_stroke_color=WHITE,
-            insert_line_no=False,
-            # style=Code.styles_list[15],
-            language="py",
-        )
-
-        # How do I slice text in my code? I want to slice because I can reference chunks of code synced with animation
-        # code0[1]
-        # snippet = code0.line_numbers()
-        self.play(Write(code0))
-        self.wait()
-
-
-class pairsBox(Scene):
-    def construct(self):
-        pass
-
-
-class arrayContainer(Scene):
-    def construct(self):
-        sq1 = Square(side_length=1)
-        sq2 = Square(side_length=1)
-        sq3 = Square(side_length=1)
-        sq4 = Square(side_length=1)
-        sq5 = Square(side_length=1)
-        self.add(sq1, sq2, sq3, sq4, sq5)
-
-        # for i, mobj in enumerate(self.mobjects):
-        #     mobj.shift(i * RIGHT)
-        #     self.play(Write(SurroundingRectangle(mobj)))
-
-        arrayObj = Group(sq1, sq2, sq3, sq4, sq5)
-        self.play((Write(arrayObj)))
-
-        self.wait()
-
-
 class AddtoVGroup(Scene):
     def construct(self):
         circle_red = Circle(color=RED)
@@ -70,20 +27,6 @@ class AddtoVGroup(Scene):
         self.play(  # Animate group without component
             (gr-circle_red).animate.shift(RIGHT)
         )
-
-
-class TextItalicAndBoldExample(Scene):
-    def construct(self):
-        text0 = Text('Hello world', slant=ITALIC)
-        text1 = Text('Hello world', t2s={'world': ITALIC})
-        text2 = Text('Hello world', weight=BOLD)
-        text3 = Text('Hello world', t2w={'world': BOLD})
-
-        self.add(text0, text1, text2, text3)
-        for i, mobj in enumerate(self.mobjects):
-            mobj.shift(DOWN*(i-1))
-            self.play(Write(mobj))
-            self.wait()
 
 
 class VariablesWithValueTracker(Scene):
