@@ -16,7 +16,7 @@ Animation projects using [Manim community edition](https://github.com/ManimCommu
 
 > 1. Figure out why .gif files are slowed down 
 > 2. Sync animations with Psuedocode
-> 3. Add Projects to JS/React Website to view all algorithms
+> 3. Add Projects to Web App to view all algorithms
 
 ## Dependencies
 
