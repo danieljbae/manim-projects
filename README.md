@@ -9,7 +9,7 @@ Animation projects using [Manim community edition](https://github.com/ManimCommu
 ![](./CS_Concepts/examples/test.gif)
 
 
-### Bubble Sort (Pre-Order)
+### Bubble Sort
 ![](./CS_Concepts/examples/showArray.gif)
 
 # To Do
