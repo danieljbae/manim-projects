@@ -11,7 +11,7 @@ Animation projects using [Manim community edition](https://github.com/ManimCommu
 # To Do
 
 > 1. Sync animations with Psuedocode
-> 2. Add Projects to JS/React Website to view all algorithms
+> 2. Add Projects to Web App to view all algorithms
 
 ## Dependencies
 
